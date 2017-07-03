@@ -1,0 +1,134 @@
+  public void datePickStart(String data){
+    	
+    	  
+    	  List<String> monthList = Arrays.asList("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+    	  // Expected Date, Month and Year
+    	  int expMonth;
+    	  int expYear;
+    	  String expDate = null;
+    	  // Calendar Month and Year
+    	  String calMonth = null;
+    	  String calYear = null;
+    	  boolean dateNotFound;
+    	  String splitter[] = data.split("-");
+    	  String month_year = splitter[1];
+    	  String day = splitter[0];
+    	  System.out.println("What is this day from JSON :" + day);
+    	  System.out.println("What is this month and Year from JSON : " +month_year);
+    	  
+    	  driver.findElement(startDate).click();
+    	  //
+    	  /*driver.findElement(By.xpath("//input[@id='datepicker']")).click();*/
+    	  dateNotFound = true;
+    	  
+    	  //Set your expected date, month and year.  
+    	  expDate = "20";
+    	  expMonth= 11;
+    	  expYear = 2015;
+    	  
+    	  //This loop will be executed continuously till dateNotFound Is true.
+    	  while(dateNotFound)
+    	  { 
+    	   //Retrieve current selected month name from date picker popup.
+    	   calMonth = driver.findElement(By.xpath("//html/body/div[4]/div[1]/table/thead/tr/th[@class='switch']")).getText();
+    	   System.out.println("Print in this month from page :" +calMonth);
+    	   //Retrieve current selected year name from date picker popup.
+    	  // calYear = driver.findElement(By.className("ui-datepicker-year")).getText();
+    	   
+    	   //If current selected month and year are same as expected month and year then go Inside this condition.
+    	  /* if(monthList.indexOf(calMonth)+1 == expMonth && (expYear == Integer.parseInt(calYear)))*/
+    	   if(calMonth.equals(month_year))
+    		 
+    	   {
+    	    //Call selectDate function with date to select and set dateNotFound flag to false.
+    	    selectDate(day);
+    	    dateNotFound = false;
+    	   }
+    	   //If current selected month and year are less than expected month and year then go Inside this condition.
+    	   else/* if(monthList.indexOf(calMonth)+1 < expMonth && (expYear == Integer.parseInt(calYear)) || expYear > Integer.parseInt(calYear))*/
+    	   {
+    	    //Click on next button of date picker.
+    	    driver.findElement(By.xpath("//html/body/div[4]/div[1]/table/thead/tr/th[@class='next']")).click();
+    	   }
+    	   //If current selected month and year are greater than expected month and year then go Inside this condition.
+    	  /* else if(monthList.indexOf(calMonth)+1 > expMonth && (expYear == Integer.parseInt(calYear)) || expYear < Integer.parseInt(calYear))
+    	   {
+    	    //Click on previous button of date picker.
+    	    driver.findElement(By.xpath(".//*[@id='ui-datepicker-div']/div/a[1]/span")).click();
+    	   }*/
+    	  }
+    	  new WebDriverWait(driver, 10).until(ExpectedConditions.elementToBeClickable(By.xpath("//html/body/div[4]/div[1]/table/thead/tr/th[@class='next']")));
+    	  //
+    	 /*
+    	  List<WebElement> all =driver.findElements(By.xpath("//html/body/div[4]/div[1]/table/thead/tr/th[@class='switch']"));
+    	  
+    	      for(int i= 0; i<all.size();i++){
+    	    	  if(all.get(i).getText().equals(month_year)){
+    	    	  List<WebElement> drop = driver.findElements(By.xpath("//html/body/div[4]/div[1]/table/tbody/tr/td[@class='day']"));
+    	    	  java.util.Iterator<WebElement> j = drop.iterator();
+    	    	  while(j.hasNext()) {
+    	    	      WebElement row = j.next();
+    	    	      System.out.println(row.getText());
+    	    	      if(!row.getText().equalsIgnoreCase(day)){
+    	    	    	
+						 	    	    	  
+    	    	      }
+    	    	      else{
+    	    	    	  driver.findElement(By.linkText(row.getText())).click();
+    	    	      }
+    	    	  }
+    	    	  
+    	      }
+    	      }*/
+    	  } 
+      
+      public void selectDate(String date)
+      {
+    	  
+    	  List<WebElement> noOfColumns;
+    	  WebElement datePicker;
+       datePicker = driver.findElement(By.xpath("//html/body/div[4]/div[1]/table/tbody")); 
+      List<WebElement> noofRows = datePicker .findElements(By.tagName("tr "));
+       noOfColumns=((WebDriver) noofRows).findElements(By.xpath("//td[@class='day'] "));
+
+       //Loop will rotate till expected date not found.
+       for (WebElement cell: noOfColumns){
+        //Select the date from date picker when condition match.
+        if (cell.getText().equals(date)){
+         cell.findElement(By.linkText(date)).click();
+         break;
+        }
+       }
+      } 
+     
+    			
+      	
+    	  
+      
+      
+      
+      public void datePickEnd(String data){
+    	  WebElement dateWidget = driver.findElement(startDate);
+    	  dateWidget.click();
+    	  List<WebElement> columns=dateWidget.findElements(By.xpath("//td[@class='day ']"));
+
+    	  for (WebElement cell: columns){
+    	     
+    	     if (cell.getText().equals(data)){
+    	        cell.findElement(By.linkText(data)).click();
+    	        break;
+    	   }
+      }
+      }
+	  
+	  //
+	   WebElement startdateWidget = driver.findElement(startDate);
+    	  startdateWidget.click();
+    	  String xpathStartDate = "//html/body/div[4]/div[1]/table/tbody/tr/td[.="+day+"]";
+    	  driver.findElement(By.xpath(xpathStartDate)).click();
+    	  
+    	 
+    	  WebElement enddateWidget = driver.findElement(endDate);
+    	  enddateWidget.click();
+    	  String xpathendDate = "//html/body/div[5]/div[1]/table/tbody/tr/td[.="+day1+"]";
+    	  driver.findElement(By.xpath(xpathendDate)).click();
